@@ -103,3 +103,30 @@ sys_getreadcount(void)
   release(&readcountlock);
   return xreadcount;
 }
+
+uint64
+sys_settickets(void)
+{
+  int n;
+  argint(0, &n);
+
+  if (n < 1)
+    return -1;
+
+  myproc()->tickets = n;
+  return 0;
+}
+
+uint64
+sys_getpinfo(void)
+{
+  uint64 p;
+  argaddr(0, &p);
+
+  if (p <= 0) {
+    return -1;
+  }
+
+  populate_pstat(p);
+  return 0;
+}
